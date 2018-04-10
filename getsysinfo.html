@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="//fonts.googleapis.com/css?family=Coda" rel="stylesheet" type="text/css" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>General Helios</title>
+</head>
+<body lang="EN-US" leftmargin="0" style="background-color:#0892AE" topmargin="0">
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="width: 1200px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; width: 200px; height: 200px;"><img alt="" height="200" src="/generalhelios/generalhelios_rev2.png" width="200" /></td>
+			<td style="text-align: center;">
+			<p><strong><span style="font-family:Coda;"><span style="font-size: 28px;">General Helios Photovoltaic System</span></span></strong></p>
+
+			<p><span style="font-family:Coda;"><span style="font-size: 18px;">Remote Monitoring</span></span></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<script>
+            /* Gets general system information from PVOutput */
+
+            /* Define string variables */
+            
+            var resp="";
+            
+            /* Define array variables */
+            
+            var completeresponse;
+            var partialresp;
+            var desc1 = ["Date","Time","Energy Generation (W-h)","Power Generation (W)","Energy Consumption (W-h)","Power Consumption (W)","Normalised Output (kW/kW)", "Temperature (F)", "Voltage (V)"];
+            /* Define variable for an HTTP request */
+            
+            var GetStatusRequest = new XMLHttpRequest();
+            
+            /* Function for a state change in request */
+            
+            GetStatusRequest.onreadystatechange = function ()
+            {
+            
+/* Function to run when ready state changes (data received successfully) */
+            
+                if (this.readyState === 4 && this.status === 200)
+                {
+            
+                resp = GetStatusRequest.responseText;
+                
+                partialresp = resp.split(',');
+                var output1="<b>Live System Status</b><br><br>";
+            
+                for (var i=0; i<partialresp.length; i++)
+                    {
+                    if (i==4 || i==5)
+                        continue;
+                    if (i==7)
+                        partialresp[i] = (1.8*partialresp[i] + 32).toFixed(1);
+                    output1 += desc1[i] + ' | ' + partialresp[i] + "<br>";
+                    };
+
+                document.getElementById("get_status").innerHTML = output1; 
+                };
+            };
+            
+             /* In order to get a response from PVOutput.org, we had to go through a dummy server bypass the CORS error */
+            
+             GetStatusRequest.open('GET', 'https://crossorigin.me/https://pvoutput.org/service/r2/getstatus.jsp?key=bf10dae59613d17ced9e89cb8c403f2afd0d2bdb&sid=56718');
+             GetStatusRequest.send( null );
+        
+</script><script>
+        /* Gets general system information from PVOutput */
+
+        /* Define string variables */
+        
+        var resp="";
+        
+        /* Define array variables */
+        
+        var completeresponse;
+        var partialresp;
+        var desc2 = ["System Name", "System Size (W)", "Location", "Number of Panels", "Panel Max Power (W)", "Panels", "Number of Inverters", "Inverter Power Rating (W)", "Inverter", "Orientation", "Array Tilt (deg)", "Shading", "Install Date", "Latitude (deg)", "Longitude (deg)", "Status Interval (mins)"];
+        
+        /* Define variable for an HTTP request */
+        
+        var SystemInfoRequest = new XMLHttpRequest();
+        
+        /* Function for a state change in request */
+        
+        SystemInfoRequest.onreadystatechange = function ()
+        {
+        
+/* Function to run when ready state changes (data received successfully) */
+        
+            if (this.readyState === 4 && this.status === 200)
+            {
+        
+            resp = SystemInfoRequest.responseText;
+            
+            completeresp = resp.split(';');
+            resp = completeresp[0];
+            
+            partialresp = resp.split(',');
+
+            var output2 = "<b>System Information</b><br><br>";
+ 
+            for (var i=0; i<partialresp.length; i++)
+                {
+                output2 += desc2[i] + ' | ' + partialresp[i] + "<br>";
+                };
+
+            document.getElementById("my_system_info").innerHTML = output2; 
+            };
+        };
+        
+         /* In order to get a response from PVOutput.org, we had to go through a dummy server bypass the CORS error */
+        
+         SystemInfoRequest.open('GET', 'https://crossorigin.me/https://pvoutput.org/service/r2/getsystem.jsp?key=bf10dae59613d17ced9e89cb8c403f2afd0d2bdb&sid=56718');
+         SystemInfoRequest.send( null );
+    
+</script><script>
+    /* Gets general system information from PVOutput */
+
+    /* Define string variables */
+    
+    var resp="";
+    
+    /* Define array variables */
+    
+    var completeresponse;
+    var partialresp;
+    var desc3 = ["Date", "Energy Generated (W-h)", "Efficiency (kWh/kW)", "Energy Exported (W-h)", "Energy Used (W-h)", "Peak Power (W)", "Peak Time", "Weather Conditions", "Min. Temperature (F)", "Max. Temperature (F)", "Peak Energy Import (W-h)", "Off-Peak Energy Import (W-h)", "Shoulder Energy Import (W-h)", "High-Shoulder Energy Import (W-h)", "Insolation (W-h)"];
+    
+    /* Define variable for an HTTP request */
+    
+    var GetOutputRequest = new XMLHttpRequest();
+    
+    /* Function for a state change in request */
+    
+    GetOutputRequest.onreadystatechange = function ()
+    {
+    
+/* Function to run when ready state changes (data received successfully) */
+    
+        if (this.readyState === 4 && this.status === 200)
+        {
+    
+        resp = GetOutputRequest.responseText;
+
+        partialresp = resp.split(',');
+
+        var output3 = "<b>Most Recent Output</b><br><br>";
+
+        for (var i=0; i<partialresp.length; i++)
+            {
+            if (i>=10)
+                continue;
+            if (i==8 || i==9)
+                partialresp[i] = (1.8*partialresp[i] + 32).toFixed(1);
+            output3 += desc3[i] + ' | ' + partialresp[i] + "<br>";
+            };
+
+        document.getElementById("get_output").innerHTML = output3; 
+        };
+    };
+    
+     /* In order to get a response from PVOutput.org, we had to go through a dummy server bypass the CORS error */
+    
+     GetOutputRequest.open('GET', 'https://crossorigin.me/https://pvoutput.org/service/r2/getoutput.jsp?key=bf10dae59613d17ced9e89cb8c403f2afd0d2bdb&sid=56718');
+     GetOutputRequest.send( null );
+
+</script>
+
+<p></p>
+
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="height:400px;width:1200px;">
+	<tbody>
+		<tr>
+			<td style="text-align: left; vertical-align: top; width: 266.67px; height: 400px;">
+			<span style="font-family:Coda;"><div id="my_system_info"></div></span>
+			</td>
+			<td style="text-align: left; vertical-align: top; width: 266.67px; height: 400px;">
+			<span style="font-family:Coda;"><div id="get_status"></div></span>
+			</td>
+			<td style="text-align: left; vertical-align: top; width: 266.67px; height: 400px;">
+			<span style="font-family:Coda;"><div id="get_output"></div></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="height:200px;width:800px;">
+	<caption>
+	<p></p>
+
+	<p><span style="font-family:Coda;"><strong>GH PV Intraday Output</strong></span></p>
+	</caption>
+	<tbody>
+		<tr>
+			<td><script src="https://pvoutput.org/widget/inc.jsp"></script><script src="https://pvoutput.org/widget/graph.jsp?sid=56718&w=800&h=200&t=1&c=1&n=1"></script></td>
+		</tr>
+	</tbody>
+</table>
+
+<p></p>
+</body>
+</html>
